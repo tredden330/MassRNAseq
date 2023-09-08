@@ -1,0 +1,7 @@
+*.csv
+*.pickle
+
+GenomeDir/**
+genome_files/**
+logs/**
+jobs/**
