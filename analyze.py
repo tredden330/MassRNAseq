@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import time
 from sklearn.decomposition import PCA
 from rnanorm import TMM
+import seaborn as sn
 
 start = time.time()
 
@@ -24,7 +25,7 @@ def initialize():
 	    file = open('pickled_matrix_head.csv', 'rb')
 	    print('using shortened data')
 	else:
-	    file = open('pickled_matrix.csv', 'rb')
+	    file = open('chrom_matrix.csv.pickle', 'rb')
 	    print('using full data')
 
 	df = pickle.load(file)
@@ -33,17 +34,24 @@ def initialize():
 
 	return df
 
+#read command line args
 df = initialize()
 
-print(df)
+#print(df)
 
-unmapped = df.iloc[0,:]
+read_names = df.iloc[:,0]
 
-col_sum = df.sum()
+unmapped = df.iloc[0,:].iloc[1:]
+
+#print(unmapped)
+
+col_sum = df.sum().iloc[1:]
+
+#print(col_sum)
 
 unmapped_percentages = unmapped/col_sum
 
-print(unmapped_percentages)
+#print(unmapped_percentages)
 
 plt.hist(col_sum)
 plt.title("number of reads")
@@ -59,9 +67,14 @@ cutoff = unmapped_percentages > percent
 
 print("samples removed because they had greater than " + str(percent) + " reads unmapped: " + str(cutoff.sum()))
 
-df = df.transpose().loc[~cutoff].transpose().iloc[4:,:]
+df = df.iloc[:,1:]
 
-df = df.transpose()
+#print(df)
+#print(cutoff)
+
+df = df.transpose().loc[~cutoff].set_axis(read_names, axis=1).transpose()
+
+df = df.iloc[4:,:].transpose()
 
 print(df)
 
@@ -76,6 +89,12 @@ print(tm)
 corr = tm.corr()
 
 print('correlation matrix: ', corr)
+
+corr.to_csv('correlation.csv')
+
+heat_map = sb.heatmap(corr)
+
+heat_map.savefig("correlation_map.png", dpi=500)
 
 def make_PCA(frame):
 
