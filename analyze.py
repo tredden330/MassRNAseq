@@ -6,6 +6,7 @@ import time
 from sklearn.decomposition import PCA
 from rnanorm import TMM
 import seaborn as sn
+import numpy as np
 
 start = time.time()
 
@@ -82,9 +83,13 @@ tm = TMM().set_output(transform="pandas").fit_transform(df)
 
 print(tm)
 
+tm.to_csv('normalized_reads.csv')
+
 #df.to_csv('trimmed_matrix.csv')
 
 #tm.to_csv("trimmed_normalized_matrix.csv")
+
+print("calculating correlation...")
 
 corr = tm.corr()
 
