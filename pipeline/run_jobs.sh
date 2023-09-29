@@ -1,3 +1,6 @@
+#this script can be used to submit all the jobs that were made by make_jobs.py
+
+#list jobs
 jobs=($(ls /work/pi_dongw_umass_edu/RNAseq/jobs))
 
 echo ${#jobs[@]}
@@ -17,10 +20,3 @@ i=$[$i+1]
 done
 sleep 1
 done
-
-#for job in ${jobs[@]}; do
-
-#    sleep 10
-#    sbatch ./jobs/$job
-
-#done

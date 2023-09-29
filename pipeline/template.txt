@@ -6,7 +6,6 @@
 #SBATCH --mem=20gb                     # Job memory request
 #SBATCH --time=10:00:00               # Time limit hrs:min:sec
 #SBATCH --output=/work/pi_dongw_umass_edu/RNAseq/logs/ERR6349854.log   # Standard output and error log
-module load bwa/0.7.17
 module load trimgalore/0.6.6
 module load sratoolkit/2.10.9
 module load samtools/1.14

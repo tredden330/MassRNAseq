@@ -2,7 +2,7 @@
 *.parquet
 *.pickle
 
-GenomeDir/**
-genome_files/**
-logs/**
-jobs/**
+GenomeDir*
+genome_files*
+logs*
+jobs*
