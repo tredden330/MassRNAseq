@@ -4,8 +4,8 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-csv_file = '/work/pi_dongw_umass_edu/RNAseq/csv/correlation.csv'
-parquet_file = '/work/pi_dongw_umass_edu/RNAseq/csv/correlation.parquet'
+csv_file = '/work/pi_dongw_umass_edu/RNAseq/csv/matrix.csv'
+parquet_file = '/work/pi_dongw_umass_edu/RNAseq/csv/matrix.parquet'
 chunksize = 100_000
 
 csv_stream = pd.read_csv(csv_file, chunksize=chunksize, low_memory=False)
