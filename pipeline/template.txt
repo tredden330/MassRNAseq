@@ -2,17 +2,19 @@
 #SBATCH --job-name=ERR6349854    # Job name
 #SBATCH --mail-type=NONE          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=tredden@umass.edu     # Where to send mail	
-#SBATCH -c 10                  # Run on a single CPU
-#SBATCH --mem=20gb                     # Job memory request
+#SBATCH -c 4                  # Run on a single CPU
+#SBATCH --mem=15gb                     # Job memory request
 #SBATCH --time=10:00:00               # Time limit hrs:min:sec
-#SBATCH --output=/work/pi_dongw_umass_edu/RNAseq/logs/ERR6349854.log   # Standard output and error log
+#SBATCH --output=/work/pi_dongw_umass_edu/RNAseq/pipeline/logs/ERR6349854.log   # Standard output and error log
 module load trimgalore/0.6.6
 module load sratoolkit/2.10.9
 module load samtools/1.14
 module load star/2.7.6a
 
 FOLDER=/scratch/workspace/tredden_umass_edu-thomas/ERR6349854
+GENOME_FOLDER=/work/pi_dongw_umass_edu/RNAseq/pipeline/GenomeDir
 
+rm -r $FOLDER
 mkdir $FOLDER
 
 fasterq-dump ERR6349854 -O $FOLDER -t $FOLDER -p
@@ -23,20 +25,21 @@ file_count=$(ls -1 "$FOLDER" | wc -l)
 if [ "$file_count" -eq 2 ]; then
     echo "running paried mode"
 
-    trim_galore -j 10 --paired $FOLDER/ERR6349854_1.fastq $FOLDER/ERR6349854_2.fastq -o $FOLDER
+    trim_galore -j 4 --paired $FOLDER/ERR6349854_1.fastq $FOLDER/ERR6349854_2.fastq -o $FOLDER
 
     rm $FOLDER/ERR6349854_1.fastq $FOLDER/ERR6349854_2.fastq
 
-    STAR --readFilesIn $FOLDER/ERR6349854_1_val_1.fq $FOLDER/ERR6349854_2_val_2.fq --quantMode GeneCounts --genomeDir /work/pi_dongw_umass_edu/RNAseq/trial/GenomeDir --outTmpDir $FOLDER/temporary --outFileNamePrefix $FOLDER/
+    STAR --runThreadN 4 --readFilesIn $FOLDER/ERR6349854_1_val_1.fq $FOLDER/ERR6349854_2_val_2.fq --quantMode GeneCounts --genomeDir $GENOME_FOLDER --outTmpDir $FOLDER/temporary \
+      --outFileNamePrefix $FOLDER/
 
 else
     echo "running single ended mode"
 
-    trim_galore -j 10 -o $FOLDER $FOLDER/ERR6349854.fastq
+    trim_galore -j 4 -o $FOLDER $FOLDER/ERR6349854.fastq
 
     rm $FOLDER/ERR6349854.fastq
 
-    STAR --readFilesIn  $FOLDER/ERR6349854_trimmed.fq --quantMode GeneCounts --genomeDir /work/pi_dongw_umass_edu/RNAseq/trial/GenomeDir --outTmpDir $FOLDER/temporary --outFileNamePrefix $FOLDER/
+    STAR  --runThreadN 4 --readFilesIn  $FOLDER/ERR6349854_trimmed.fq --quantMode GeneCounts --genomeDir $GENOME_FOLDER --outTmpDir $FOLDER/temporary --outFileNamePrefix $FOLDER/
 fi
 
 rm $FOLDER/*.fq $FOLDER/*.sam

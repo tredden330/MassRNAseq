@@ -7,7 +7,7 @@ library(arrow)
 library(data.table)
 library(tidyverse)
 library(plotly)
-BiocManager::install(version = "3.16")
+library(readxl)
 
 
 
@@ -77,15 +77,41 @@ fviz_pca_var(chrom_pca, label="none")
 #gene_correlations <- cor(df.data)
 #gene_correlations <- data.frame(gene_correlations)
 #write_parquet(gene_correlations, "/work/pi_dongw_umass_edu/RNAseq/csv/correlations.parquet")
-gene_correlations = read_parquet("/work/pi_dongw_umass_edu/RNAseq/csv/correlations.parquet")
+gene_correlations = read_parquet("/work/pi_dongw_umass_edu/RNAseq/data/correlations.parquet")
 
+#UMAP genes
 umap_mapping <- umap(gene_correlations)
 coords <- data.frame(umap_mapping$layout)
-plot <- ggplot(coords, mapping=aes(x=X1, y=X2, label=rowNames(gene_correlations))) + 
+plot <- ggplot(coords, mapping=aes(x=X1, y=X2, label=colnames(umap_mapping$data))) + 
   geom_point() +
   ggtitle("Colored by tissue")
 
-heatmap(as.matrix(gene_correlations), Rowv = F, Colv = F)
+ggplotly(plot)
+
+#isolate cluster
+mapping_df <- data.frame(umap_mapping$layout) %>%
+  mutate("chr_labels" = colnames(umap_mapping$data)) %>%
+  filter(X1 < -7)
+
+#isolate gene functions
+ids <- read_excel("/work/pi_dongw_umass_edu/RNAseq/pipeline/genome_files/Mt_gene_Acronyms_IDs_latest.xlsx")
+
+heatmap(as.matrix(gene_correlations[1:10,1:10]), Rowv = NA, Colv = NA)
+
+#isolate gene -- mt-bell4 = MtrunA17_Chr8g0387321
+
+gene = "MtrunA17_Chr8g0387321"
+
+retrieve_correlating <- function(gene_id) {
+  output <- gene_correlations %>%
+    select(gene_id) %>%
+    mutate(gene_name = colnames(gene_correlations)) %>%
+    arrange(desc(gene_id))
+  View(output)
+}	
+
+output <- kmeans(umap_mapping$data, centers=2)
+
 
 corr_pca <- prcomp(gene_correlations_df)
 fviz_eig(corr_pca)
