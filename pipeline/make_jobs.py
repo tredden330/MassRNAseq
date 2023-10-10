@@ -15,7 +15,7 @@ except:
 os.mkdir(jobs_folder)
 
 #read the accession list data
-names = pd.read_csv("test_list.txt", sep='\t')
+names = pd.read_csv("acc_list.txt", sep='\t')
 
 #load the template
 with open("template.txt") as f:

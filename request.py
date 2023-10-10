@@ -6,7 +6,7 @@ import pandas as pd
 Entrez.email = "tom@thomasredden.com"
 Entrez.api_key = "86593167cdbc8bbab5c6076fb92fd7af4b09"
 
-accessions = pd.read_csv("/work/pi_dongw_umass_edu/RNAseq/pipeline/full_list.txt", sep="\t").iloc[:,0]
+accessions = pd.read_csv("/work/pi_dongw_umass_edu/RNAseq/pipeline/acc_list.txt", sep="\t").iloc[:,0]
 
 #create an empty dictionary to hold all the data
 dict = {'ID':[],
@@ -106,4 +106,4 @@ for accession in accessions:
 #frame it up!
 df = pd.DataFrame(dict)
 print(df)
-df.to_parquet("/work/pi_dongw_umass_edu/RNAseq/csv/meta.parquet")
+df.to_parquet("/work/pi_dongw_umass_edu/RNAseq/data/meta.parquet")

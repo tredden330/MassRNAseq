@@ -13,6 +13,7 @@ counter = 0
 
 #loop through each folder in the workspace
 for folder in os.listdir(workspace_path):
+    print("reading from: ", folder)
     try:
 
         #read ReadsPerGene file, extract data, and append it to the data
@@ -29,11 +30,9 @@ for folder in os.listdir(workspace_path):
         #the ReadsPerGene file does not exist
         print("error in folder: " + folder)
 
-    print(counter)
-    counter += 1
-
-
 matrix = pd.DataFrame(data)
 
 #save it as a parquet!! it saves so much space and retrieval time
-matrix.to_parquet("matrix.paruet")
+matrix.to_parquet("/work/pi_dongw_umass_edu/RNAseq/data/matrix2.parquet")
+
+
