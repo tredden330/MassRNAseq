@@ -1,11 +1,20 @@
 import networkx as nx
-import numpy as np
 import matplotlib.pyplot as plt
-import pyvis
 import pandas as pd
 
-correlations = pd.read_parquet('correlation_mt.parquet')
 
 
+list = pd.read_csv('top_20.csv', index_col=0)
 
-print(correlations)
+G = nx.Graph()
+
+G.add_node(list.columns[0])
+
+for i in list.index:
+    G.add_node(i)
+    if list.index[0] != i:
+        G.add_edge(list.index[0], i)
+
+nx.draw(G, with_labels=True, font_weight='bold')
+
+plt.savefig("network.png", dpi=200)

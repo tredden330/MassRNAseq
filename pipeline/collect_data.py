@@ -34,5 +34,3 @@ matrix = pd.DataFrame(data)
 
 #save it as a parquet!! it saves so much space and retrieval time
 matrix.to_parquet("/work/pi_dongw_umass_edu/RNAseq/data/matrix2.parquet")
-
-
