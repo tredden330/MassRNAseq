@@ -18,6 +18,14 @@ This is a breakdown of the main flow:
 
 Aside from the pipeline, I have also developed a small script for gathering metadata about each entry, [request.py](https://github.com/tredden330/MassRNAseq/blob/master/request.py) will use the accession list and request data from NCBI's servers about organism, tissue type, bioproject information, and more
 
+There are many basic analysis tools that have been constructed with python. Presently, there are analysis for...
+
+network analysis
+![alt text](/graphs/network_big.png)
+![alt text](/new_network_5.png)
+heatmap generation
+![alt text](/heatmap.png)
+
 ## Modification
 
 Though I made this tool for a rather specific purpose, I hope I explained its mechanics enough to where others can use it and modify it for their own analysis
