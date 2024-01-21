@@ -2,21 +2,24 @@ import requests as rq
 import pandas as pd
 from bs4 import BeautifulSoup
 
-data = pd.read_csv("nodes.csv", index_col=0)
+def retrieve_labels(labels):
 
-url_base = "https://www.ncbi.nlm.nih.gov/gene/?term="
+	#data = pd.read_csv("nodes.csv", index_col=0)
 
-labels = []
-for loc in data.iloc[:,0]:
-    url = url_base + loc
-    r = rq.get(url)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    labels.append(soup.title.string)
+	url_base = "https://www.ncbi.nlm.nih.gov/gene/?term="
 
-data['labels'] = labels
+	labels
 
-data.to_csv("node_functions.csv", index=False)
-
-print(data)
+	for label in labels:
+		url = url_base + label
+		r = rq.get(url)
+		soup = BeautifulSoup(r.text, 'html.parser')
+		labels.append(soup.title.string)
 
 
+	data['labels'] = labels
+
+#	data.to_csv("node_functions.csv", index=False)
+
+	print(data)
+	return data

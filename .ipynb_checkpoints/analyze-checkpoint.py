@@ -5,8 +5,16 @@ import matplotlib.pyplot as plt
 
 start= time.time()
 
+annotations = pd.read_csv("node_functions.csv", index_col=0).to_dict()
+
+map = annotations['new_label']
+
+#plt.rcParams["figure.figsize"] = [6,4]
+
 df = pd.read_parquet("data/correlations.parquet")
 df.index = df.columns
+#print(df)
+#df.iloc[:100,:100].to_csv("head.csv")
 
 def retrieveTop(loc):
     return df[loc].sort_values(ascending=False).iloc[0:5]
@@ -38,13 +46,15 @@ for name in top.index:
         if new_top.index[0] != i:
             G.add_edge(new_top.index[0], i)
 
+
+nx.relabel_nodes(G, mapping=map, copy=False)
+
 color_map = []
 for node in list(G.nodes.data()):
     col = node[1]['color']
     color_map.append(col)
 
-relabel_nodes(G, mapping={'LOC25502090':'MtBell4'}, copy=False)
-    
+
 nx.draw_spring(G, with_labels=True, font_weight='bold', node_color=color_map, node_size=80)
 
 print(G.nodes.data)
@@ -53,6 +63,8 @@ nodes = list(G.nodes)
 
 pd.DataFrame(nodes).to_csv("nodes.csv")
 
-plt.savefig("network_5.svg", format='svg')
+#plt.rcParams["figure.figsize"] = [40,40]
+plt.tight_layout()
+plt.savefig("new_network_5.png", format='png', dpi=800)
 
 print("finished in: ", time.time() - start , " seconds" )
