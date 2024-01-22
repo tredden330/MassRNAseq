@@ -1,10 +1,8 @@
 # Mass RNA-sequencing Analysis
 
-The goal of this project is to download and analyze all data that exists on the [NCBI sequence read archive](https://www.ncbi.nlm.nih.gov/sra)
+The goal of this project is to perform a parallel pipelining tool, pulling data from [NCBI sequence read archive](https://www.ncbi.nlm.nih.gov/sra)
 
-Though the initial aim of this project was to analyze all public RNA-sequencing of the model legume *Medicago Truncatula*, this tool can be modified for anyone who wants to download and analyze data housed on the sra
-
-It utilizes the UMASS Unity computing cluster's job scheduler, SLURM, to make and run many jobs in parallel
+It utilizes the UMASS Unity computing cluster's job scheduler, SLURM, for job submission
 
 ## Explanation of the tool
 
